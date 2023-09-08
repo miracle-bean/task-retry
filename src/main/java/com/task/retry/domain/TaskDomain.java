@@ -18,32 +18,32 @@ public class TaskDomain {
         this.task = task;
     }
 
-    public boolean toWait() {
+    public boolean ready() {
         this.task.setState(TaskState.WAIT.name());
-        return taskMapper.updateById(task) > 0;
+        return taskMapper.updateById(task, TaskState.toWaitState()) > 0;
     }
 
-    public boolean toRun() {
+    public boolean running() {
         this.task.setState(TaskState.RUNNING.name());
-        return taskMapper.updateById(task) > 0;
+        // 处于running状态，就认为已经执行了一次
+        this.task.setExecutedCount(task.getExecutedCount() + 1);
+        return taskMapper.updateById(task, TaskState.toRunningState()) > 0;
     }
 
-    public boolean toFinish() {
+    public boolean finish() {
         this.task.setState(TaskState.FINISHED.name());
-        this.task.setExecutedCount(task.getExecutedCount() + 1);
-        return taskMapper.updateById(task) > 0;
+        return taskMapper.updateById(task, TaskState.toFinishedState()) > 0;
     }
 
-    public boolean toFailed(String errorMessage) {
+    public boolean failed(String errorMessage) {
         this.task.setState(TaskState.FAILED.name());
-        this.task.setExecutedCount(task.getExecutedCount() + 1);
         this.task.setErrorMessage(errorMessage);
-        return taskMapper.updateById(task) > 0;
+        return taskMapper.updateById(task, TaskState.toFailedState()) > 0;
     }
 
     public boolean cancel() {
         this.task.setState(TaskState.CANCEL.name());
-        return taskMapper.updateById(task) > 0;
+        return taskMapper.updateById(task, TaskState.toCancelState()) > 0;
     }
 
 }

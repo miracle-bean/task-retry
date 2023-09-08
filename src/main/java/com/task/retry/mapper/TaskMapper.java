@@ -28,7 +28,7 @@ public interface TaskMapper {
 
     TaskDO getById(@Param("id") Long id);
 
-    int updateById(TaskDO task);
+    int updateById(@Param("task") TaskDO task, @Param("stateList") List<String> stateList);
 
 
 }

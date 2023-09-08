@@ -94,9 +94,15 @@
             `error_message`   = #{errorMessage},
             `order`           = #{order},
             `async`           = #{async},
-            `version`         = #{version} + 1
+            `version`         = version + 1
         WHERE id = #{id}
         and version = #{version}
+        <if test='stateList != null and stateList.size > 0'>
+            and t.state in
+            <foreach collection="stateList" item="state" open="(" close=")" separator=",">
+                #{state}
+            </foreach>
+        </if>
     </update>
 
 </mapper>

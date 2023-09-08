@@ -14,7 +14,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -28,17 +27,19 @@ import java.util.stream.Collectors;
 public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskExecuteImpl.class);
-    private final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 100, 1000, TimeUnit.MICROSECONDS, new LinkedBlockingQueue<>(1000));
     private final TaskMapper taskMapper;
     /**
      * 分发任务的颗粒度大小，其实就是每次翻页的颗粒度大小
      */
     private final Integer particleSize;
+    private final Factory factory;
+    private final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 100, 1000, TimeUnit.MICROSECONDS, new LinkedBlockingQueue<>(1000));
     private ApplicationContext applicationContext;
 
-    public TaskExecuteImpl(TaskMapper taskMapper, Integer particleSize) {
+    public TaskExecuteImpl(TaskMapper taskMapper, Integer particleSize, Factory factory) {
         this.taskMapper = taskMapper;
         this.particleSize = particleSize;
+        this.factory = factory;
     }
 
     /**
@@ -51,7 +52,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         do {
             offset = startPage * particleSize;
             taskList = taskMapper.pageList(offset, particleSize, new TaskPageRequest()
-                    .setStateList(getCanDistributionTaskState())
+                    .setStateList(TaskState.distributionTaskState())
                     .setIsLessMaxTimes(Boolean.TRUE));
             if (taskList == null || taskList.isEmpty()) {
                 break;
@@ -71,9 +72,9 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         // 需要同步执行的任务
         List<TaskDO> commonList = list.stream().filter(TaskDO::getAsync).collect(Collectors.toList());
         // 异步执行开始
-        asyncList.forEach(asyncTask -> executor.submit(() -> doPusherEvent(asyncTask)));
+        asyncList.forEach(asyncTask -> executor.submit(() -> doPushEvent(asyncTask)));
         // 同步执行开始
-        commonList.forEach(this::doPusherEvent);
+        commonList.forEach(this::doPushEvent);
     }
 
     /**
@@ -83,30 +84,23 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
      * <p>or</p>
      * -> RUNNING -> FINISH
      */
-    private void doPusherEvent(TaskDO task) {
+    private void doPushEvent(TaskDO task) {
         // 创建领域
-        TaskDomain domain = Factory.create(taskMapper, task);
-        domain.toRun();
+        TaskDomain domain = factory.create(taskMapper, task);
+        boolean isRun = domain.running();
+        if (!isRun) {
+            logger.warn("状态更新失败,该任务已经被分,task:{}", task);
+            return;
+        }
         try {
             applicationContext.publishEvent(new TaskEvent(task));
         } catch (Exception e) {
-            logger.error("task error", e);
+            logger.error("push error task:{}", task, e);
             // 执行失败了
-            domain.toFailed(e.getMessage());
+            domain.failed(e.getMessage());
             return;
         }
-        domain.toFinish();
-    }
-
-    /**
-     * 获取可以分发任务的任务状态集合
-     * 即：TaskState.WAIT && TaskState.FAILED
-     */
-    private List<String> getCanDistributionTaskState() {
-        List<String> list = new ArrayList<>();
-        list.add(TaskState.WAIT.name());
-        list.add(TaskState.FAILED.name());
-        return list;
+        domain.finish();
     }
 
     @Override

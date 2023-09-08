@@ -9,7 +9,7 @@ import com.task.retry.mapper.TaskMapper;
  */
 public class Factory {
 
-    public static TaskDomain create(TaskMapper taskMapper, TaskDO taskDO) {
+    public TaskDomain create(TaskMapper taskMapper, TaskDO taskDO) {
         return new TaskDomain(taskMapper, taskDO);
     }
 

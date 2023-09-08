@@ -21,6 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mybatis-spring-boot-starter.version>2.3.0</mybatis-spring-boot-starter.version>
         <lombok.version>1.18.24</lombok.version>
+        <guava.version>20.0</guava.version>
     </properties>
 
     <dependencies>
@@ -45,6 +46,11 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
         <dependency>
