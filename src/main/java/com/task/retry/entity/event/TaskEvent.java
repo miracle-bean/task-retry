@@ -1,6 +1,6 @@
-package com.task.retry.entity.dto;
+package com.task.retry.entity.event;
 
-import com.task.retry.entity.model.TaskDO;
+import com.task.retry.entity.model.Task;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,7 +15,7 @@ public class TaskEvent implements Serializable {
 
     private static final long serialVersionUID = 3957255307413538624L;
 
-    public TaskEvent(TaskDO taskDO) {
+    public TaskEvent(Task taskDO) {
         this.createTime = taskDO.getCreateTime();
         this.updateTime = taskDO.getUpdateTime();
         this.businessId = taskDO.getBusinessId();

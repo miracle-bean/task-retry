@@ -3,8 +3,8 @@ package com.task.retry.domain.impl;
 import com.task.retry.domain.Factory;
 import com.task.retry.domain.TaskDomain;
 import com.task.retry.domain.TaskExecute;
-import com.task.retry.entity.dto.TaskEvent;
-import com.task.retry.entity.model.TaskDO;
+import com.task.retry.entity.event.TaskEvent;
+import com.task.retry.entity.model.Task;
 import com.task.retry.entity.request.TaskPageRequest;
 import com.task.retry.enums.TaskState;
 import com.task.retry.mapper.TaskMapper;
@@ -48,7 +48,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
     public void taskDistribution() {
         Integer startPage = 0;
         int offset;
-        List<TaskDO> taskList;
+        List<Task> taskList;
         do {
             offset = startPage * particleSize;
             taskList = taskMapper.pageList(offset, particleSize, new TaskPageRequest()
@@ -63,14 +63,14 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         } while (!taskList.isEmpty());
     }
 
-    private void pushTask(List<TaskDO> list) {
+    private void pushTask(List<Task> list) {
         if (list == null) {
             return;
         }
         // 需要异步执行的人任务
-        List<TaskDO> asyncList = list.stream().filter(TaskDO::getAsync).collect(Collectors.toList());
+        List<Task> asyncList = list.stream().filter(Task::getAsync).collect(Collectors.toList());
         // 需要同步执行的任务
-        List<TaskDO> commonList = list.stream().filter(TaskDO::getAsync).collect(Collectors.toList());
+        List<Task> commonList = list.stream().filter(Task::getAsync).collect(Collectors.toList());
         // 异步执行开始
         asyncList.forEach(asyncTask -> executor.submit(() -> doPushEvent(asyncTask)));
         // 同步执行开始
@@ -84,7 +84,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
      * <p>or</p>
      * -> RUNNING -> FINISH
      */
-    private void doPushEvent(TaskDO task) {
+    private void doPushEvent(Task task) {
         // 创建领域
         TaskDomain domain = factory.create(taskMapper, task);
         boolean isRun = domain.running();

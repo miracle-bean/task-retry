@@ -1,4 +1,4 @@
-package com.task.retry.config;
+package com.task.retry.autoconfig;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,5 +16,9 @@ public class TaskRetryProperties {
      * 其实就是分页的大小，默认是100
      */
     private Integer particleSize = 100;
+    /**
+     * 任务最大重试此处，默认3次
+     */
+    private Integer maxRetryCount = 3;
 
 }

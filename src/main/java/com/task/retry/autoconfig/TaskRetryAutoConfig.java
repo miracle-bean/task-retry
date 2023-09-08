@@ -1,11 +1,13 @@
 package com.task.retry.autoconfig;
 
-import com.task.retry.config.TaskRetryProperties;
+import com.task.retry.TaskOperator;
 import com.task.retry.domain.Factory;
 import com.task.retry.domain.TaskExecute;
 import com.task.retry.domain.impl.TaskExecuteImpl;
+import com.task.retry.impl.TaskOperatorImpl;
 import com.task.retry.mapper.TaskMapper;
 import lombok.Data;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +18,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
+@MapperScan(basePackages = "com.task.retry.mapper")
 @EnableConfigurationProperties({TaskRetryProperties.class})
 public class TaskRetryAutoConfig {
 
     private final TaskRetryProperties properties;
+    private final TaskMapper taskMapper;
 
     @Bean
     public Factory factory() {
@@ -27,9 +31,13 @@ public class TaskRetryAutoConfig {
     }
 
     @Bean
-    public TaskExecute taskExecute(TaskMapper taskMapper, Factory factory) {
+    public TaskExecute taskExecute(Factory factory) {
         return new TaskExecuteImpl(taskMapper, properties.getParticleSize(), factory);
     }
 
+    @Bean
+    public TaskOperator taskOperator(Factory factory) {
+        return new TaskOperatorImpl(factory, taskMapper, properties);
+    }
 
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class TaskDO implements Serializable {
+public class Task implements Serializable {
 
     private static final long serialVersionUID = 7920192769847820032L;
     /**

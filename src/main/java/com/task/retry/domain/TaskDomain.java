@@ -1,6 +1,7 @@
 package com.task.retry.domain;
 
-import com.task.retry.entity.model.TaskDO;
+import com.task.retry.autoconfig.TaskRetryProperties;
+import com.task.retry.entity.model.Task;
 import com.task.retry.enums.TaskState;
 import com.task.retry.mapper.TaskMapper;
 
@@ -11,11 +12,19 @@ import com.task.retry.mapper.TaskMapper;
 public class TaskDomain {
 
     private final TaskMapper taskMapper;
-    private final TaskDO task;
+    private final Task task;
+    private final TaskRetryProperties properties;
 
-    public TaskDomain(TaskMapper taskMapper, TaskDO task) {
+    public TaskDomain(TaskMapper taskMapper, Task task, TaskRetryProperties properties) {
         this.taskMapper = taskMapper;
         this.task = task;
+        this.properties = properties;
+    }
+
+    public boolean register() {
+        task.setState(TaskState.WAIT.name());
+        task.setMaxRetryCount(properties.getMaxRetryCount());
+        return taskMapper.save(task) > 0;
     }
 
     public boolean ready() {
@@ -43,6 +52,13 @@ public class TaskDomain {
 
     public boolean cancel() {
         this.task.setState(TaskState.CANCEL.name());
+        return taskMapper.updateById(task, TaskState.toCancelState()) > 0;
+    }
+
+    public boolean reset() {
+        this.task.setState(TaskState.CANCEL.name());
+        this.task.setExecutedCount(0);
+        this.task.setErrorMessage(null);
         return taskMapper.updateById(task, TaskState.toCancelState()) > 0;
     }
 
