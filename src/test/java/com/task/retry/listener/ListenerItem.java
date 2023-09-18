@@ -16,7 +16,7 @@ public class ListenerItem {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskExecuteImpl.class);
 
-    @EventListener(condition = "T(com.task.retry.entity.event.TaskEvent).businessType.equals(#taskEvent.businessType)")
+    @EventListener(condition = "T(com.task.retry.type.TaskType).TEST_TYPE.name().equals(#taskEvent.businessType)")
     public void handler(TaskEvent taskEvent) {
         logger.info("taskEvent:{}", taskEvent);
     }
