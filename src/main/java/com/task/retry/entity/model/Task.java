@@ -66,9 +66,13 @@ public class Task implements Serializable {
      */
     private Integer version;
     /**
+     * 乐观锁
+     */
+    private Integer nextVersion;
+    /**
      * 任务同步or异步
      * true：异步
-     * false：异步
+     * false：同步
      */
     private Boolean async;
 

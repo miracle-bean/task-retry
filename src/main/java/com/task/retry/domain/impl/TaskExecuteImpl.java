@@ -70,7 +70,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         // 需要异步执行的人任务
         List<Task> asyncList = list.stream().filter(Task::getAsync).collect(Collectors.toList());
         // 需要同步执行的任务
-        List<Task> commonList = list.stream().filter(Task::getAsync).collect(Collectors.toList());
+        List<Task> commonList = list.stream().filter(p -> !p.getAsync()).collect(Collectors.toList());
         // 异步执行开始
         asyncList.forEach(asyncTask -> executor.submit(() -> doPushEvent(asyncTask)));
         // 同步执行开始

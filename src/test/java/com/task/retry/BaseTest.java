@@ -10,6 +10,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
  * Author: miracle
@@ -20,6 +21,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 @SpringBootTest(classes = TaskRetryTestApplication.class)
 @ActiveProfiles
 @TestExecutionListeners({
+        TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class})

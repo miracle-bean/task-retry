@@ -15,12 +15,12 @@ public class TaskEvent implements Serializable {
 
     private static final long serialVersionUID = 3957255307413538624L;
 
-    public TaskEvent(Task taskDO) {
-        this.createTime = taskDO.getCreateTime();
-        this.updateTime = taskDO.getUpdateTime();
-        this.businessId = taskDO.getBusinessId();
-        this.businessType = taskDO.getBusinessType();
-        this.payload = taskDO.getPayload();
+    public TaskEvent(Task task) {
+        this.createTime = task.getCreateTime();
+        this.updateTime = task.getUpdateTime();
+        this.businessId = task.getBusinessId();
+        this.businessType = task.getBusinessType();
+        this.payload = task.getPayload();
     }
 
     /**
