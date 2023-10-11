@@ -83,25 +83,86 @@ public class TaskOperatorImplTest extends BaseTest {
     @Test
     @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
     public void cancel_when_running_failed() {
-//        taskOperator.cancel();
+        Long taskId = 2L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.RUNNING.name());
+            }
+        });
+        taskOperator.cancel(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.RUNNING.name());
+            }
+        });
     }
 
     @Test
     @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
     public void cancel_when_finished_failed() {
-//        taskOperator.cancel();
+        Long taskId = 3L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.FINISHED.name());
+            }
+        });
+        taskOperator.cancel(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.FINISHED.name());
+            }
+        });
     }
 
     @Test
     @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
     public void cancel_when_cancel_failed() {
-//        taskOperator.cancel();
+        Long taskId = 5L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.CANCEL.name());
+            }
+        });
+        taskOperator.cancel(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.CANCEL.name());
+            }
+        });
     }
 
     @Test
     @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
     public void cancel_when_failed_success() {
-//        taskOperator.cancel();
+        Long taskId = 4L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.FAILED.name());
+            }
+        });
+        taskOperator.cancel(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.CANCEL.name());
+            }
+        });
+
     }
 
     @Test
