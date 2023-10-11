@@ -60,15 +60,11 @@ public class Task implements Serializable {
     /**
      * 执行优先级，越大优先级越高
      */
-    private Integer order;
+    private Integer taskOrder;
     /**
      * 乐观锁
      */
     private Integer version;
-    /**
-     * 乐观锁
-     */
-    private Integer nextVersion;
     /**
      * 任务同步or异步
      * true：异步

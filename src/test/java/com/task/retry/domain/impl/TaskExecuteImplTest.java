@@ -19,7 +19,7 @@ public class TaskExecuteImplTest extends BaseTest {
     private TaskExecute taskExecute;
 
     @Test
-    @DatabaseSetup(value = {"data/task_setup.xml"})
+    @DatabaseSetup(value = {"../../../../../data/task_setup.xml"})
     public void taskDistribution() {
         taskExecute.taskDistribution();
     }

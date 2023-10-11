@@ -6,6 +6,7 @@ import com.task.retry.domain.Factory;
 import com.task.retry.domain.TaskDomain;
 import com.task.retry.domain.impl.TaskExecuteImpl;
 import com.task.retry.entity.model.Task;
+import com.task.retry.entity.request.QueryTaskRequest;
 import com.task.retry.mapper.TaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,9 @@ public class TaskOperatorImpl implements TaskOperator {
             logger.warn("cancel taskIds is empty");
             return;
         }
-        taskIds.parallelStream().forEach(id -> factory.create(taskMapper, new Task()).cancel());
+        List<Task> tasks = taskMapper.queryList(new QueryTaskRequest()
+                .setIdList(taskIds));
+        tasks.parallelStream().forEach(task -> factory.create(taskMapper, task).cancel());
     }
 
     @Override
@@ -60,7 +63,9 @@ public class TaskOperatorImpl implements TaskOperator {
             logger.warn("reset taskIds is empty");
             return;
         }
-        taskIds.parallelStream().forEach(id -> factory.create(taskMapper, new Task()).reset());
+        List<Task> tasks = taskMapper.queryList(new QueryTaskRequest()
+                .setIdList(taskIds));
+        tasks.parallelStream().forEach(task -> factory.create(taskMapper, task).reset());
     }
 
 }

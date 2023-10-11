@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class TaskPageRequest implements Serializable {
+public class QueryTaskRequest implements Serializable {
 
-    private static final long serialVersionUID = -5286193291117130492L;
+    private static final long serialVersionUID = 1646935682095649320L;
 
     /**
      * id
@@ -32,9 +32,5 @@ public class TaskPageRequest implements Serializable {
      * 业务自定义id
      */
     private String businessId;
-    /**
-     * 已经执行次数小于最大执行次数
-     */
-    private Boolean isLessMaxTimes = Boolean.TRUE;
 
 }

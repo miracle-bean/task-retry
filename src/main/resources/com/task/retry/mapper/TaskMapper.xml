@@ -14,7 +14,7 @@
         <result column="max_retry_count" jdbcType="INTEGER" property="maxRetryCount"/>
         <result column="executed_count" jdbcType="INTEGER" property="executedCount"/>
         <result column="error_message" jdbcType="VARCHAR" property="errorMessage"/>
-        <result column="order" jdbcType="INTEGER" property="order"/>
+        <result column="task_order" jdbcType="INTEGER" property="taskOrder"/>
         <result column="async" jdbcType="BOOLEAN" property="async"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
     </resultMap>
@@ -30,7 +30,7 @@
 		t.max_retry_count,
 		t.executed_count,
 		t.error_message,
-        t.`order`,
+        t.`task_order`,
         t.async,
 		t.`version`
     </sql>
@@ -67,17 +67,44 @@
                 </otherwise>
             </choose>
         </where>
-        order by t.order desc, t.id desc
+        order by t.task_order desc, t.id desc
         LIMIT #{offset}, #{pageSize}
     </select>
+
+    <select id="queryList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumn"/>
+        FROM task AS t
+        <where>
+            <if test="request.businessType != null and request.businessType != ''">
+                and t.business_type = #{request.businessType}
+            </if>
+            <if test="request.businessId != null and request.businessId != ''">
+                and t.business_id = #{request.businessId}
+            </if>
+            <if test='request.idList != null and request.idList.size > 0'>
+                and t.id in
+                <foreach collection="request.idList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test='request.stateList != null and request.stateList.size > 0'>
+                and t.state in
+                <foreach collection="request.stateList" item="state" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
 
     <insert id="save" parameterType="com.task.retry.entity.model.Task" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO task (`business_type`, `business_id`, `payload`, `state`, `max_retry_count`, `error_message`
         <if test='executedCount != null'>
             , `executed_count`
         </if>
-        <if test='order != null'>
-            , `order`
+        <if test='taskOrder != null'>
+            , `task_order`
         </if>
         <if test='async != null'>
             , `async`
@@ -87,8 +114,8 @@
         <if test='executedCount != null'>
             , #{executedCount},
         </if>
-        <if test='order != null'>
-            , #{order}
+        <if test='taskOrder != null'>
+            , #{taskOrder}
         </if>
         <if test='async != null'>
             , #{async}
@@ -112,9 +139,9 @@
         `max_retry_count` = #{task.maxRetryCount},
         `executed_count` = #{task.executedCount},
         `error_message` = #{task.errorMessage},
-        `order` = #{task.order},
+        `task_order` = #{task.taskOrder},
         `async` = #{task.async},
-        `version` = #{task.nextVersion}
+        `version` = `version` + 1
         WHERE id = #{task.id}
         and version = #{task.version}
         <if test='stateList != null and stateList.size > 0'>

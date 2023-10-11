@@ -1,6 +1,7 @@
 package com.task.retry.mapper;
 
 import com.task.retry.entity.model.Task;
+import com.task.retry.entity.request.QueryTaskRequest;
 import com.task.retry.entity.request.TaskPageRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,8 +27,7 @@ public interface TaskMapper {
                         @Param("pageSize") Integer pageSize,
                         @Param("request") TaskPageRequest request);
 
-    // todo
-//    List<Task> list();
+    List<Task> queryList(@Param("request") QueryTaskRequest request);
 
     int save(Task task);
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dataset>
+    <task id="1" create_time="2023-09-09 00:00:00" update_time="2023-09-09 00:00:00" business_type="testDemo1"
+          business_id="1" payload="payload" state="WAIT" max_retry_count="3" executed_count="0" error_message=" "
+          task_order="99" async="true" version="0"/>
+    <task id="2" create_time="2023-09-09 00:00:00" update_time="2023-09-09 00:00:00" business_type="testDemo2"
+          business_id="2" payload="payload" state="RUNNING" max_retry_count="3" executed_count="1" error_message=" "
+          task_order="99" async="true" version="1"/>
+    <task id="3" create_time="2023-09-09 00:00:00" update_time="2023-09-09 00:00:00" business_type="testDemo3"
+          business_id="3" payload="payload" state="FINISHED" max_retry_count="3" executed_count="1" error_message=" "
+          task_order="99" async="true" version="2"/>
+    <task id="4" create_time="2023-09-09 00:00:00" update_time="2023-09-09 00:00:00" business_type="testDemo4"
+          business_id="4" payload="payload" state="FAILED" max_retry_count="3" executed_count="1" error_message=" "
+          task_order="99" async="true" version="2"/>
+    <task id="5" create_time="2023-09-09 00:00:00" update_time="2023-09-09 00:00:00" business_type="testDemo5"
+          business_id="5" payload="payload" state="CANCEL" max_retry_count="3" executed_count="1" error_message=" "
+          task_order="99" async="true" version="2"/>
+</dataset>

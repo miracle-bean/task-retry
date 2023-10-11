@@ -42,13 +42,6 @@ public enum TaskState {
     }
 
     /**
-     * 可以转为[WAIT]状态的任务状态集合
-     */
-    public static List<String> toWaitState() {
-        return Lists.newArrayList(RUNNING.name(), FINISHED.name(), FAILED.name(), CANCEL.name());
-    }
-
-    /**
      * 可以转为[RUNNING]状态的任务状态集合
      */
     public static List<String> toRunningState() {
