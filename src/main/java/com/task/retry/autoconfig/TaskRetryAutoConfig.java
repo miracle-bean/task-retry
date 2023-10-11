@@ -1,10 +1,12 @@
 package com.task.retry.autoconfig;
 
 import com.task.retry.TaskOperator;
+import com.task.retry.TaskQuery;
 import com.task.retry.domain.Factory;
 import com.task.retry.domain.TaskExecute;
 import com.task.retry.domain.impl.TaskExecuteImpl;
 import com.task.retry.impl.TaskOperatorImpl;
+import com.task.retry.impl.TaskQueryImpl;
 import com.task.retry.mapper.TaskMapper;
 import lombok.Data;
 import org.mybatis.spring.annotation.MapperScan;
@@ -38,6 +40,11 @@ public class TaskRetryAutoConfig {
     @Bean
     public TaskOperator taskOperator(Factory factory) {
         return new TaskOperatorImpl(factory, taskMapper, properties);
+    }
+
+    @Bean
+    public TaskQuery taskQuery() {
+        return new TaskQueryImpl(taskMapper);
     }
 
 }

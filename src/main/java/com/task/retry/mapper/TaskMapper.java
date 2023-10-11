@@ -26,6 +26,9 @@ public interface TaskMapper {
                         @Param("pageSize") Integer pageSize,
                         @Param("request") TaskPageRequest request);
 
+    // todo
+//    List<Task> list();
+
     int save(Task task);
 
     Task getById(@Param("id") Long id);

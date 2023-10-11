@@ -2,6 +2,8 @@ package com.task.retry.impl;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.task.retry.BaseTest;
+import com.task.retry.TaskOperator;
+import com.task.retry.TaskQuery;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +16,9 @@ import java.util.UUID;
 public class TaskOperatorImplTest extends BaseTest {
 
     @Autowired
-    private TaskOperatorImpl taskOperator;
+    private TaskOperator taskOperator;
+    @Autowired
+    private TaskQuery taskQuery;
 
     @Test
     @DatabaseSetup(value = {"data/task_setup.xml"})
@@ -23,10 +27,17 @@ public class TaskOperatorImplTest extends BaseTest {
         String businessId = UUID.randomUUID().toString();
         String payload = UUID.randomUUID().toString();
         taskOperator.register(businessType, businessId, payload);
+        // todo
+//        Task task = taskQuery.queryByBusiness(businessType, businessId);
+//        assertThat(task).isNotNull();
     }
 
     @Test
-    public void testRegister() {
+    public void test_register_only_businessType() {
+        String businessType = UUID.randomUUID().toString();
+        String payload = UUID.randomUUID().toString();
+        taskOperator.register(businessType, payload);
+        // todo
     }
 
     @Test
@@ -36,4 +47,5 @@ public class TaskOperatorImplTest extends BaseTest {
     @Test
     public void reset() {
     }
+
 }
