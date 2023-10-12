@@ -20,5 +20,9 @@ public class TaskRetryProperties {
      * 任务最大重试此处，默认3次
      */
     private Integer maxRetryCount = 3;
+    /**
+     * 启动任务自动分发
+     */
+    private Boolean autoJob = Boolean.TRUE;
 
 }
