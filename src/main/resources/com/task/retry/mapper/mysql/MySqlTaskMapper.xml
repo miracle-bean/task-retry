@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.task.retry.mapper.mysql.MySqlTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.task.retry.entity.model.Task">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+        <result column="business_id" jdbcType="VARCHAR" property="businessId"/>
+        <result column="payload" jdbcType="VARCHAR" property="payload"/>
+        <result column="state" jdbcType="VARCHAR" property="state"/>
+        <result column="max_retry_count" jdbcType="INTEGER" property="maxRetryCount"/>
+        <result column="executed_count" jdbcType="INTEGER" property="executedCount"/>
+        <result column="error_message" jdbcType="VARCHAR" property="errorMessage"/>
+        <result column="task_order" jdbcType="INTEGER" property="taskOrder"/>
+        <result column="async" jdbcType="BOOLEAN" property="async"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        t.id,
+		t.create_time,
+		t.update_time,
+		t.business_type,
+		t.business_id,
+		t.payload,
+		t.state,
+		t.max_retry_count,
+		t.executed_count,
+		t.error_message,
+        t.task_order,
+        t.async,
+		t.version
+    </sql>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumn"/>
+        FROM task AS t
+        <where>
+            <if test="request.businessType != null and request.businessType != ''">
+                and t.business_type = #{request.businessType}
+            </if>
+            <if test="request.businessId != null and request.businessId != ''">
+                and t.business_id = #{request.businessId}
+            </if>
+            <if test='request.idList != null and request.idList.size > 0'>
+                and t.id in
+                <foreach collection="request.idList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test='request.stateList != null and request.stateList.size > 0'>
+                and t.state in
+                <foreach collection="request.stateList" item="state" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+            <choose>
+                <when test="request.isLessMaxTimes">
+                    and t.executed_count &lt; t.max_retry_count
+                </when>
+                <otherwise>
+                    and t.executed_count &gt;= t.max_retry_count
+                </otherwise>
+            </choose>
+        </where>
+        order by t.task_order desc, t.id desc
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="postgrePageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumn"/>
+        FROM task AS t
+        <where>
+            <if test="request.businessType != null and request.businessType != ''">
+                and t.business_type = #{request.businessType}
+            </if>
+            <if test="request.businessId != null and request.businessId != ''">
+                and t.business_id = #{request.businessId}
+            </if>
+            <if test='request.idList != null and request.idList.size > 0'>
+                and t.id in
+                <foreach collection="request.idList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test='request.stateList != null and request.stateList.size > 0'>
+                and t.state in
+                <foreach collection="request.stateList" item="state" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+            <choose>
+                <when test="request.isLessMaxTimes">
+                    and t.executed_count &lt; t.max_retry_count
+                </when>
+                <otherwise>
+                    and t.executed_count &gt;= t.max_retry_count
+                </otherwise>
+            </choose>
+        </where>
+        order by t.task_order desc, t.id desc
+        LIMIT #{pageSize}
+        offset #{offset}
+    </select>
+
+
+    <select id="queryList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseColumn"/>
+        FROM task AS t
+        <where>
+            <if test="request.businessType != null and request.businessType != ''">
+                and t.business_type = #{request.businessType}
+            </if>
+            <if test="request.businessId != null and request.businessId != ''">
+                and t.business_id = #{request.businessId}
+            </if>
+            <if test='request.idList != null and request.idList.size > 0'>
+                and t.id in
+                <foreach collection="request.idList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test='request.stateList != null and request.stateList.size > 0'>
+                and t.state in
+                <foreach collection="request.stateList" item="state" open="(" close=")" separator=",">
+                    #{state}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="save" parameterType="com.task.retry.entity.model.Task" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO task (business_type, business_id, payload, state, max_retry_count, error_message
+        <if test='executedCount != null'>
+            , executed_count
+        </if>
+        <if test='taskOrder != null'>
+            , task_order
+        </if>
+        <if test='async != null'>
+            , async
+        </if>
+        )
+        values (#{businessType}, #{businessId}, #{payload}, #{state}, #{maxRetryCount}, #{errorMessage}
+        <if test='executedCount != null'>
+            , #{executedCount},
+        </if>
+        <if test='taskOrder != null'>
+            , #{taskOrder}
+        </if>
+        <if test='async != null'>
+            , #{async}
+        </if>
+        );
+    </insert>
+
+    <select id="getById" parameterType="java.lang.Long" resultType="com.task.retry.entity.model.Task">
+        SELECT
+        <include refid="baseColumn"/>
+        FROM task AS t
+        WHERE t.id = #{id}
+    </select>
+
+    <update id="updateById" parameterType="com.task.retry.entity.model.Task">
+        UPDATE task
+        SET business_type = #{task.businessType},
+        business_id = #{task.businessId},
+        payload = #{task.payload},
+        state = #{task.state},
+        max_retry_count = #{task.maxRetryCount},
+        executed_count = #{task.executedCount},
+        error_message = #{task.errorMessage},
+        task_order = #{task.taskOrder},
+        async = #{task.async},
+        version = version + 1
+        WHERE id = #{task.id}
+        and version = #{task.version}
+        <if test='stateList != null and stateList.size > 0'>
+            and state in
+            <foreach collection="stateList" item="state" open="(" close=")" separator=",">
+                #{state}
+            </foreach>
+        </if>
+    </update>
+
+</mapper>
+

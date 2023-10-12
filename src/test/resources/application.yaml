@@ -8,6 +8,11 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+#     url: jdbc:postgresql://{ip:port}/{dbname}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#     username: username
+#     password: password
+#     driver-class-name: org.postgresql.Driver
+
 
 mybatis:
   mapper-locations: com.task.retry.mapper/*.xml

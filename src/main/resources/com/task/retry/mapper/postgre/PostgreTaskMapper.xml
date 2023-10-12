@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.task.retry.mapper.TaskMapper">
+<mapper namespace="com.task.retry.mapper.postgre.PostgreTaskMapper">
 
     <resultMap id="BaseResultMap" type="com.task.retry.entity.model.Task">
         <result column="id" jdbcType="BIGINT" property="id"/>
@@ -68,8 +68,10 @@
             </choose>
         </where>
         order by t.task_order desc, t.id desc
-        LIMIT #{offset}, #{pageSize}
+        LIMIT #{pageSize}
+        offset #{offset}
     </select>
+
 
     <select id="queryList" resultMap="BaseResultMap">
         SELECT
