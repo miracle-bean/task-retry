@@ -24,5 +24,9 @@ public class TaskRetryProperties {
      * 启动任务自动分发
      */
     private Boolean autoJob = Boolean.TRUE;
+    /**
+     * 默认每十秒执行一次
+     */
+    private String cron = "0/10 * * * * ?";
 
 }

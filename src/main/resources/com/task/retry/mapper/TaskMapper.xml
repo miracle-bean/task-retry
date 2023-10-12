@@ -30,9 +30,9 @@
 		t.max_retry_count,
 		t.executed_count,
 		t.error_message,
-        t.`task_order`,
+        t.task_order,
         t.async,
-		t.`version`
+		t.version
     </sql>
 
     <select id="pageList" resultMap="BaseResultMap">
@@ -99,15 +99,15 @@
 
 
     <insert id="save" parameterType="com.task.retry.entity.model.Task" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO task (`business_type`, `business_id`, `payload`, `state`, `max_retry_count`, `error_message`
+        INSERT INTO task (business_type, business_id, payload, state, max_retry_count, error_message
         <if test='executedCount != null'>
-            , `executed_count`
+            , executed_count
         </if>
         <if test='taskOrder != null'>
-            , `task_order`
+            , task_order
         </if>
         <if test='async != null'>
-            , `async`
+            , async
         </if>
         )
         values (#{businessType}, #{businessId}, #{payload}, #{state}, #{maxRetryCount}, #{errorMessage}
@@ -132,20 +132,20 @@
 
     <update id="updateById" parameterType="com.task.retry.entity.model.Task">
         UPDATE task
-        SET `business_type` = #{task.businessType},
-        `business_id` = #{task.businessId},
-        `payload` = #{task.payload},
-        `state` = #{task.state},
-        `max_retry_count` = #{task.maxRetryCount},
-        `executed_count` = #{task.executedCount},
-        `error_message` = #{task.errorMessage},
-        `task_order` = #{task.taskOrder},
-        `async` = #{task.async},
-        `version` = `version` + 1
+        SET business_type = #{task.businessType},
+        business_id = #{task.businessId},
+        payload = #{task.payload},
+        state = #{task.state},
+        max_retry_count = #{task.maxRetryCount},
+        executed_count = #{task.executedCount},
+        error_message = #{task.errorMessage},
+        task_order = #{task.taskOrder},
+        async = #{task.async},
+        version = version + 1
         WHERE id = #{task.id}
         and version = #{task.version}
         <if test='stateList != null and stateList.size > 0'>
-            and `state` in
+            and state in
             <foreach collection="stateList" item="state" open="(" close=")" separator=",">
                 #{state}
             </foreach>

@@ -8,7 +8,7 @@ import com.task.retry.domain.impl.TaskExecuteImpl;
 import com.task.retry.impl.TaskOperatorImpl;
 import com.task.retry.impl.TaskQueryImpl;
 import com.task.retry.mapper.TaskMapper;
-import com.task.retry.schedule.ScheduleJob;
+import com.task.retry.schedule.TaskScheduleJob;
 import lombok.Data;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -49,11 +49,11 @@ public class TaskRetryAutoConfig {
     }
 
     @Bean
-    public ScheduleJob scheduleJob(TaskExecute taskExecute) {
+    public TaskScheduleJob scheduleJob(TaskExecute taskExecute) {
         if (!properties.getAutoJob()) {
             return null;
         }
-        return new ScheduleJob(taskExecute);
+        return new TaskScheduleJob(taskExecute, properties);
     }
 
 }
