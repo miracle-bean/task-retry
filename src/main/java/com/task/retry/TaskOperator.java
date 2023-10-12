@@ -34,7 +34,7 @@ public interface TaskOperator {
     void cancel(List<Long> taskIds);
 
     /**
-     * 重置任务，任务重置会WAIT状态，且已执行次数重置为零
+     * 重置任务，任务重置回WAIT状态，且已执行次数重置为零
      * <p></p>
      *
      * @param taskIds 必须

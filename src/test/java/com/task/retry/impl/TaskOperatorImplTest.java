@@ -7,6 +7,7 @@ import com.task.retry.TaskOperator;
 import com.task.retry.TaskQuery;
 import com.task.retry.entity.model.Task;
 import com.task.retry.enums.TaskState;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +167,118 @@ public class TaskOperatorImplTest extends BaseTest {
     }
 
     @Test
-    public void reset() {
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void reset_when_wait_success() {
+        Long taskId = 1L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name());
+            }
+        });
+        taskOperator.reset(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name())
+                        && task.getExecutedCount() == 0
+                        && StringUtils.isBlank(task.getErrorMessage());
+            }
+        });
+    }
+
+    @Test
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void reset_when_running_success() {
+        Long taskId = 2L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.RUNNING.name());
+            }
+        });
+        taskOperator.reset(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name())
+                        && task.getExecutedCount() == 0
+                        && StringUtils.isBlank(task.getErrorMessage());
+            }
+        });
+    }
+
+    @Test
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void reset_when_FINISHED_success() {
+        Long taskId = 3L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.FINISHED.name());
+            }
+        });
+        taskOperator.reset(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name())
+                        && task.getExecutedCount() == 0
+                        && StringUtils.isBlank(task.getErrorMessage());
+            }
+        });
+    }
+
+    @Test
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void reset_when_FAILED_success() {
+        Long taskId = 4L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.FAILED.name());
+            }
+        });
+        taskOperator.reset(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name())
+                        && task.getExecutedCount() == 0
+                        && StringUtils.isBlank(task.getErrorMessage());
+            }
+        });
+    }
+
+    @Test
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void reset_when_CANCEL_success() {
+        Long taskId = 5L;
+        Task oldTask = taskQuery.getById(taskId);
+        assertThat(oldTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.CANCEL.name());
+            }
+        });
+        taskOperator.reset(Lists.newArrayList(taskId));
+        Task newTask = taskQuery.getById(taskId);
+        assertThat(newTask).isNotNull().has(new Condition<Task>() {
+            @Override
+            public boolean matches(Task task) {
+                return task.getState().equals(TaskState.WAIT.name())
+                        && task.getExecutedCount() == 0
+                        && StringUtils.isBlank(task.getErrorMessage());
+            }
+        });
     }
 
 }
