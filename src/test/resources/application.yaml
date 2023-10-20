@@ -4,13 +4,13 @@ spring:
   application:
     name: task-retry
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/miracle?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://{ip}:{port}/{dbname}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: {username}
+    password: {password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-#     url: jdbc:postgresql://{ip:port}/{dbname}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-#     username: username
-#     password: password
+#     url: jdbc:postgresql://{ip}:{port}/{dbname}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#     username: {username}
+#     password: {password}
 #     driver-class-name: org.postgresql.Driver
 
 

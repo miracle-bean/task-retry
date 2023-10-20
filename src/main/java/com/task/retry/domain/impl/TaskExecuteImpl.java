@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -64,7 +65,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
     }
 
     private void pushTask(List<Task> list) {
-        if (list == null) {
+        if (CollectionUtils.isEmpty(list)) {
             return;
         }
         // 需要异步执行的人任务
