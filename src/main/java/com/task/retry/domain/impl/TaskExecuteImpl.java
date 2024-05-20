@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -54,7 +55,8 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
             offset = startPage * particleSize;
             taskList = taskMapper.pageList(offset, particleSize, new TaskPageRequest()
                     .setStateList(TaskState.distributionTaskState())
-                    .setIsLessMaxTimes(Boolean.TRUE));
+                    .setIsLessMaxTimes(Boolean.TRUE)
+                    .setNextFireTime(LocalDateTime.now().plusSeconds(15)));
             if (taskList == null || taskList.isEmpty()) {
                 break;
             }

@@ -54,6 +54,10 @@ public class Task implements Serializable {
      */
     private Integer executedCount;
     /**
+     * 下次执行时间
+     */
+    private LocalDateTime nextFireTime;
+    /**
      * 执行过程中的报错信息
      */
     private String errorMessage;

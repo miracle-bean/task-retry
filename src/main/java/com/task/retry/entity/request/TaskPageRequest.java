@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,6 +33,10 @@ public class TaskPageRequest implements Serializable {
      * 业务自定义id
      */
     private String businessId;
+    /**
+     * 下次执行时间
+     */
+    private LocalDateTime nextFireTime;
     /**
      * 已经执行次数小于最大执行次数
      */

@@ -11,6 +11,7 @@ import com.task.retry.mapper.TaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -34,17 +35,29 @@ public class TaskOperatorImpl implements TaskOperator {
 
     @Override
     public void register(String businessType, String businessId, String payload) {
-        TaskDomain taskDomain = factory.create(taskMapper, new Task()
-                .setBusinessType(businessType)
-                .setBusinessId(businessId)
-                .setPayload(payload), properties);
-        taskDomain.register();
+        this.register(businessType, businessId, LocalDateTime.now(), payload);
     }
 
     @Override
     public void register(String businessType, String payload) {
-        register(businessType, null, payload);
+        this.register(businessType, null, LocalDateTime.now(), payload);
     }
+
+    @Override
+    public void register(String businessType, LocalDateTime nextFireTime, String payload) {
+        this.register(businessType, null, nextFireTime, payload);
+    }
+
+    @Override
+    public void register(String businessType, String businessId, LocalDateTime nextFireTime, String payload) {
+        TaskDomain taskDomain = factory.create(taskMapper, new Task()
+                .setBusinessType(businessType)
+                .setBusinessId(businessId)
+                .setPayload(payload)
+                .setNextFireTime(nextFireTime), properties);
+        taskDomain.register();
+    }
+
 
     @Override
     public void cancel(List<Long> taskIds) {

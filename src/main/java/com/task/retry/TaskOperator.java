@@ -1,5 +1,6 @@
 package com.task.retry;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -17,12 +18,23 @@ public interface TaskOperator {
      * @param businessId   业务侧用于区分任务的id，非必须
      * @param payload      业务侧存放任务相关数据（比如方法请求入参），必须
      */
+    void register(String businessType, String businessId, LocalDateTime nextFireTime, String payload);
+
+    /**
+     * 注册一个任务
+     */
     void register(String businessType, String businessId, String payload);
 
     /**
      * 注册一个任务
      */
     void register(String businessType, String payload);
+
+
+    /**
+     * 注册一个任务
+     */
+    void register(String businessType, LocalDateTime nextFireTime, String payload);
 
     /**
      * 取消任务，被取消的任务将不会再执行
