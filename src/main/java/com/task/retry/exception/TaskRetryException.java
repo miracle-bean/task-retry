@@ -1,11 +1,14 @@
 package com.task.retry.exception;
 
+import java.io.Serial;
+
 /**
  * Author: miracle
  * Date: 2023/9/7 14:21
  */
 public class TaskRetryException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -7033857680827931305L;
 
     protected TaskRetryException(String message) {

@@ -3,6 +3,7 @@ package com.task.retry.entity.request;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class TaskPageRequest implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -5286193291117130492L;
 
     /**

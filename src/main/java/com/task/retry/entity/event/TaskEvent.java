@@ -3,6 +3,7 @@ package com.task.retry.entity.event;
 import com.task.retry.entity.model.Task;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 public class TaskEvent implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 3957255307413538624L;
 
     public TaskEvent(Task task) {

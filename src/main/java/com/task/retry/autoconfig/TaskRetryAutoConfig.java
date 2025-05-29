@@ -10,6 +10,7 @@ import com.task.retry.impl.TaskOperatorImpl;
 import com.task.retry.impl.TaskQueryImpl;
 import com.task.retry.mapper.TaskMapper;
 import com.task.retry.schedule.TaskScheduleJob;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
@@ -17,7 +18,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

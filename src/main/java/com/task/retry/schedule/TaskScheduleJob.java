@@ -32,7 +32,7 @@ public class TaskScheduleJob implements SchedulingConfigurer {
         taskRegistrar.addTriggerTask(this::invoke, triggerContext -> {
             // 动态cron
             CronTrigger trigger = new CronTrigger(properties.getCron());
-            return trigger.nextExecutionTime(triggerContext);
+            return trigger.nextExecution(triggerContext);
         });
     }
 
