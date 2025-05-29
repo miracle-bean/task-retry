@@ -3,6 +3,7 @@ package com.task.retry.entity.request;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class QueryTaskRequest implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1646935682095649320L;
 
     /**

@@ -4,6 +4,7 @@ import com.task.retry.enums.TaskState;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class Task implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 7920192769847820032L;
     /**
      * 主键

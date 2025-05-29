@@ -2,13 +2,10 @@ package com.task.retry.impl;
 
 import com.google.common.collect.Lists;
 import com.task.retry.TaskQuery;
-import com.task.retry.domain.impl.TaskExecuteImpl;
 import com.task.retry.entity.model.Task;
 import com.task.retry.entity.request.QueryTaskRequest;
 import com.task.retry.mapper.TaskMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -20,7 +17,6 @@ import java.util.Optional;
  */
 public class TaskQueryImpl implements TaskQuery {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskExecuteImpl.class);
     private final TaskMapper taskMapper;
 
     public TaskQueryImpl(TaskMapper taskMapper) {
