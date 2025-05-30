@@ -35,7 +35,12 @@ public class TaskDomain {
         this.task.setState(TaskState.RUNNING.name());
         // 处于running状态，就认为已经执行了一次
         this.task.setExecutedCount(task.getExecutedCount() + 1);
-        return taskMapper.updateById(task, TaskState.toRunningState()) > 0;
+        boolean bool = taskMapper.updateById(task, TaskState.toRunningState()) > 0;
+        if (bool) {
+            // 更新成功，要为领域的版本号+1，以保证下次操作
+            this.task.setVersion(task.getVersion() + 1);
+        }
+        return bool;
     }
 
     /**
@@ -43,7 +48,12 @@ public class TaskDomain {
      */
     public boolean finish() {
         this.task.setState(TaskState.FINISHED.name());
-        return taskMapper.updateById(task, TaskState.toFinishedState()) > 0;
+        boolean bool = taskMapper.updateById(task, TaskState.toFinishedState()) > 0;
+        if (bool) {
+            // 更新成功，要为领域的版本号+1，以保证下次操作
+            this.task.setVersion(task.getVersion() + 1);
+        }
+        return bool;
     }
 
     /**
@@ -52,7 +62,12 @@ public class TaskDomain {
     public boolean failed(String errorMessage) {
         this.task.setState(TaskState.FAILED.name());
         this.task.setErrorMessage(errorMessage);
-        return taskMapper.updateById(task, TaskState.toFailedState()) > 0;
+        boolean bool = taskMapper.updateById(task, TaskState.toFailedState()) > 0;
+        if (bool) {
+            // 更新成功，要为领域的版本号+1，以保证下次操作
+            this.task.setVersion(task.getVersion() + 1);
+        }
+        return bool;
     }
 
     /**
@@ -63,7 +78,12 @@ public class TaskDomain {
      */
     public boolean cancel() {
         this.task.setState(TaskState.CANCEL.name());
-        return taskMapper.updateById(task, TaskState.toCancelState()) > 0;
+        boolean bool = taskMapper.updateById(task, TaskState.toCancelState()) > 0;
+        if (bool) {
+            // 更新成功，要为领域的版本号+1，以保证下次操作
+            this.task.setVersion(task.getVersion() + 1);
+        }
+        return bool;
     }
 
     /**
@@ -73,7 +93,12 @@ public class TaskDomain {
         this.task.setState(TaskState.WAIT.name());
         this.task.setExecutedCount(0);
         this.task.setErrorMessage(null);
-        return taskMapper.updateById(task, Lists.newArrayList()) > 0;
+        boolean bool = taskMapper.updateById(task, Lists.newArrayList()) > 0;
+        if (bool) {
+            // 更新成功，要为领域的版本号+1，以保证下次操作
+            this.task.setVersion(task.getVersion() + 1);
+        }
+        return bool;
     }
 
 }

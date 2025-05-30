@@ -72,7 +72,7 @@
                 </otherwise>
             </choose>
         </where>
-        order by t.task_order desc, t.id desc
+        order by t.task_order desc, t.id asc
         LIMIT #{pageSize}
         offset #{offset}
     </select>
