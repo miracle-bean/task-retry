@@ -6,11 +6,19 @@ import com.task.retry.entity.model.Task;
 import com.task.retry.enums.TaskState;
 import com.task.retry.mapper.TaskMapper;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Random;
+
 /**
  * Author: miracle
  * Date: 2023/9/7 22:09
  */
 public class TaskDomain {
+
+    private static final long BASE_DELAY_SECONDS = 1; // 基础等待时间（秒）
+    private static final long MAX_JITTER_MS = 500;   // 随机抖动上限（毫秒）
+    private static final Random random = new Random();
 
     private final TaskMapper taskMapper;
     private final Task task;
@@ -62,6 +70,7 @@ public class TaskDomain {
     public boolean failed(String errorMessage) {
         this.task.setState(TaskState.FAILED.name());
         this.task.setErrorMessage(errorMessage);
+        this.task.setNextFireTime(calculateNextFireTime(this.task.getExecutedCount()));
         boolean bool = taskMapper.updateById(task, TaskState.toFailedState()) > 0;
         if (bool) {
             // 更新成功，要为领域的版本号+1，以保证下次操作
@@ -99,6 +108,18 @@ public class TaskDomain {
             this.task.setVersion(task.getVersion() + 1);
         }
         return bool;
+    }
+
+    /**
+     * 指数退避 + 随机抖动的核心逻辑
+     */
+    private static LocalDateTime calculateNextFireTime(Integer executedCount) {
+        // 1. 指数退避计算基础等待时间
+        long delaySeconds = (long) (BASE_DELAY_SECONDS * Math.pow(2, executedCount));
+        // 2. 添加随机抖动（0~500毫秒）
+        long jitterMs = random.nextInt((int) MAX_JITTER_MS);
+        long totalDelayMs = delaySeconds * 1000 + jitterMs;
+        return LocalDateTime.now().plus(totalDelayMs, ChronoUnit.MILLIS);
     }
 
 }
