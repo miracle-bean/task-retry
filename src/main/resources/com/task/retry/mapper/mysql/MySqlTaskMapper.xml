@@ -72,47 +72,9 @@
                 </otherwise>
             </choose>
         </where>
-        order by t.task_order desc, t.id desc
+        order by t.task_order desc, t.id asc
         LIMIT #{offset}, #{pageSize}
     </select>
-
-    <select id="postgrePageList" resultMap="BaseResultMap">
-        SELECT
-        <include refid="baseColumn"/>
-        FROM task AS t
-        <where>
-            <if test="request.businessType != null and request.businessType != ''">
-                and t.business_type = #{request.businessType}
-            </if>
-            <if test="request.businessId != null and request.businessId != ''">
-                and t.business_id = #{request.businessId}
-            </if>
-            <if test='request.idList != null and request.idList.size > 0'>
-                and t.id in
-                <foreach collection="request.idList" item="id" open="(" close=")" separator=",">
-                    #{id}
-                </foreach>
-            </if>
-            <if test='request.stateList != null and request.stateList.size > 0'>
-                and t.state in
-                <foreach collection="request.stateList" item="state" open="(" close=")" separator=",">
-                    #{state}
-                </foreach>
-            </if>
-            <choose>
-                <when test="request.isLessMaxTimes">
-                    and t.executed_count &lt; t.max_retry_count
-                </when>
-                <otherwise>
-                    and t.executed_count &gt;= t.max_retry_count
-                </otherwise>
-            </choose>
-        </where>
-        order by t.task_order desc, t.id desc
-        LIMIT #{pageSize}
-        offset #{offset}
-    </select>
-
 
     <select id="queryList" resultMap="BaseResultMap">
         SELECT

@@ -20,7 +20,6 @@ public class TaskScheduleJob implements SchedulingConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(TaskScheduleJob.class);
     private final TaskExecute taskExecute;
     private final TaskRetryProperties properties;
-    private final StopWatch stopWatch = new StopWatch();
 
     public TaskScheduleJob(TaskExecute taskExecute, TaskRetryProperties properties) {
         this.taskExecute = taskExecute;
@@ -38,6 +37,7 @@ public class TaskScheduleJob implements SchedulingConfigurer {
 
     private void invoke() {
         logger.info("start taskDistribution");
+        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         taskExecute.taskDistribution();
         stopWatch.stop();
