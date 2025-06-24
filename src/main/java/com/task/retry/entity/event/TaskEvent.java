@@ -46,4 +46,9 @@ public class TaskEvent implements Serializable {
      */
     private String payload;
 
+    /**
+     * 执行失败后的回掉
+     */
+    private Runnable failRunnable;
+
 }

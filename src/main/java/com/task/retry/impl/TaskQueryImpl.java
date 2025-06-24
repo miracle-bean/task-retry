@@ -60,4 +60,10 @@ public class TaskQueryImpl implements TaskQuery {
                         .setIdList(ids)))
                 .orElse(Lists.newArrayList());
     }
+
+    @Override
+    public Boolean hasNotCompleteFailed(String businessType, String businessId) {
+        return taskMapper.selectNotCompleteFailedCount(businessType, businessId) > 0;
+    }
+
 }
