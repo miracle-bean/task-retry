@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Author: miracle
@@ -75,7 +74,7 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         // 需要同步执行的任务
         List<Task> commonList = list.stream().filter(p -> !p.getAsync()).toList();
         // 异步执行开始
-        asyncList.forEach(asyncTask -> executor.submit(() -> doPushEvent(asyncTask)));
+        asyncList.forEach(asyncTask -> executor.submit(() -> this.doPushEvent(asyncTask)));
         // 同步执行开始
         commonList.forEach(this::doPushEvent);
     }
@@ -95,12 +94,18 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
             logger.warn("状态更新失败,该任务已经被分,task:{}", task);
             return;
         }
+        TaskEvent taskEvent = new TaskEvent(task);
         try {
-            applicationContext.publishEvent(new TaskEvent(task));
+            applicationContext.publishEvent(taskEvent);
         } catch (Exception e) {
             logger.error("push error task:{}", task, e);
             // 执行失败了
             domain.failed(e.getMessage());
+            // 失败的回调
+            Runnable failRunnable = taskEvent.getFailRunnable();
+            if (failRunnable != null) {
+                failRunnable.run();
+            }
             return;
         }
         domain.finish();

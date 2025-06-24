@@ -159,5 +159,20 @@
         </if>
     </update>
 
+    <select id="selectNotCompleteFailedCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM task AS t
+        WHERE t.business_type = #{businessType}
+          and t.business_id = #{businessId}
+          and (
+            t.state &lt;&gt; 'FAILED'
+                or
+            (
+                t.state = 'FAILED'
+                    and t.executed_count &lt; t.max_retry_count
+                )
+            )
+    </select>
+
 </mapper>
 

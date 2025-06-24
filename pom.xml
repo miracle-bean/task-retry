@@ -104,4 +104,23 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- 生成源码 JAR 并随主构件一起部署 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase> <!-- 绑定到 verify 阶段 -->
+                        <goals>
+                            <goal>jar-no-fork</goal> <!-- 生成源码 JAR -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
