@@ -12,7 +12,7 @@ CREATE TABLE `task`
     `max_retry_count` int(4)                                 NOT NULL DEFAULT '3' COMMENT '最大重试次数',
     `executed_count`  int(4)                                 NOT NULL DEFAULT '0' COMMENT '已经执行的次数',
     `next_fire_time`  timestamp                              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下次执行时间',
-    `error_message`   varchar(1024) COLLATE utf8mb4_unicode_ci        DEFAULT NULL COMMENT '执行过程中的报错信息',
+    `error_message`   text COLLATE utf8mb4_unicode_ci        DEFAULT NULL COMMENT '执行过程中的报错信息',
     `task_order`      int(4)                                 NOT NULL DEFAULT '99' COMMENT '执行优先级，越大优先级越高',
     `async`           tinyint(1)                             NOT NULL DEFAULT '0' COMMENT '异步或同步， true：异步，false：同步',
     `version`         int(4)                                 NOT NULL DEFAULT '0' COMMENT '乐观锁',
