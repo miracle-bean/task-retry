@@ -53,9 +53,9 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         do {
             offset = startPage * particleSize;
             taskList = taskMapper.pageList(offset, particleSize, new TaskPageRequest()
-                    .setStateList(TaskState.distributionTaskState())
-                    .setIsLessMaxTimes(Boolean.TRUE)
-                    .setNextFireTime(LocalDateTime.now().plusSeconds(15)));
+                .setStateList(TaskState.distributionTaskState())
+                .setIsLessMaxTimes(Boolean.TRUE)
+                .setNextFireTime(LocalDateTime.now().plusSeconds(15)));
             if (taskList == null || taskList.isEmpty()) {
                 break;
             }
@@ -97,18 +97,18 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
         TaskEvent taskEvent = new TaskEvent(task);
         try {
             applicationContext.publishEvent(taskEvent);
+            domain.finish();
         } catch (Exception e) {
             logger.error("push error task:{}", task, e);
             // 执行失败了
             domain.failed(e.getMessage());
-            // 失败的回调
-            Runnable failRunnable = taskEvent.getFailRunnable();
-            if (failRunnable != null) {
-                failRunnable.run();
+        } finally {
+            // 最后执行一次回调
+            Runnable finalRunnable = taskEvent.getFinalRunnable();
+            if (finalRunnable != null) {
+                finalRunnable.run();
             }
-            return;
         }
-        domain.finish();
     }
 
     @Override
