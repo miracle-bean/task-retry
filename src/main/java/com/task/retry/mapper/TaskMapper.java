@@ -24,6 +24,6 @@ public interface TaskMapper {
 
     int updateById(Task task, List<String> stateList);
 
-    int selectNotCompleteFailedCount(String businessType, String businessId);
+    int selectNotCompleteFailedCount(String businessType, String groupId);
 
 }

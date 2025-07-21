@@ -62,8 +62,8 @@ public class TaskQueryImpl implements TaskQuery {
     }
 
     @Override
-    public Boolean hasNotCompleteFailed(String businessType, String businessId) {
-        return taskMapper.selectNotCompleteFailedCount(businessType, businessId) > 0;
+    public Boolean hasNotCompleteFailed(String businessType, String groupId) {
+        return taskMapper.selectNotCompleteFailedCount(businessType, groupId) > 0;
     }
 
 }

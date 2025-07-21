@@ -40,10 +40,10 @@ public interface TaskQuery {
     List<Task> queryByIds(List<Long> ids);
 
     /**
-     * 把businessType + businessId认为是一个整体任务
+     * 把businessType + groupId认为是一个整体任务
      * 是否还有除了已经完全失败的任务，比如：失败的但还有充实次数，或者是运行中的
      * 完全失败：所有任务都已经执行完毕，但有失败的
      */
-    Boolean hasNotCompleteFailed(String businessType, String businessId);
+    Boolean hasNotCompleteFailed(String businessType, String groupId);
 
 }

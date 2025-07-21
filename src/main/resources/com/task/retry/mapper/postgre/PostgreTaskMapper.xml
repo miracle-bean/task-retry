@@ -163,7 +163,7 @@
         SELECT count(1)
         FROM task AS t
         WHERE t.business_type = #{businessType}
-          and t.business_id = #{businessId}
+          AND t.business_id LIKE CONCAT(#{groupId}, '%')
           and (
             t.state &lt;&gt; 'FAILED'
                 or
