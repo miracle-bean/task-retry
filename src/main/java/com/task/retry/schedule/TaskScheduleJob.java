@@ -36,12 +36,12 @@ public class TaskScheduleJob implements SchedulingConfigurer {
     }
 
     private void invoke() {
-        logger.info("start taskDistribution");
+//        logger.info("start taskDistribution");
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         taskExecute.taskDistribution();
         stopWatch.stop();
-        logger.info("end taskDistribution, time:{}", stopWatch.getLastTaskTimeMillis());
+//        logger.info("end taskDistribution, time:{}", stopWatch.getLastTaskTimeMillis());
     }
 
 }
