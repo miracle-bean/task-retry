@@ -36,6 +36,6 @@ public interface MySqlTaskMapper extends TaskMapper {
 
     int updateById(@Param("task") Task task, @Param("stateList") List<String> stateList);
 
-    int selectNotCompleteFailedCount(@Param("businessType") String businessType, @Param("groupId") String groupId);
+    int selectNotCompleteCount(@Param("businessType") String businessType, @Param("groupId") String groupId);
 
 }

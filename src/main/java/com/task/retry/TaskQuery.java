@@ -44,6 +44,6 @@ public interface TaskQuery {
      * 是否还有除了已经完全失败的任务，比如：失败的但还有充实次数，或者是运行中的
      * 完全失败：所有任务都已经执行完毕，但有失败的
      */
-    Boolean hasNotCompleteFailed(String businessType, String groupId);
+    Boolean hasNotComplete(String businessType, String groupId);
 
 }
