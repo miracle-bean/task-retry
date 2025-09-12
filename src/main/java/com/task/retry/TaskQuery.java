@@ -46,4 +46,10 @@ public interface TaskQuery {
      */
     Boolean hasNotComplete(String businessType, String groupId);
 
+    /**
+     * 把businessType + groupId认为是一个整体任务
+     * 查询是否已经完全失败了，只要有一个失败，并且达到了最大执行次数，就是失败
+     */
+    Boolean hasFail(String businessType, String groupId);
+
 }

@@ -38,4 +38,6 @@ public interface PostgreTaskMapper extends TaskMapper {
 
     int selectNotCompleteCount(@Param("businessType") String businessType, @Param("groupId") String groupId);
 
+    int hasFail(@Param("businessType") String businessType, @Param("groupId") String groupId);
+
 }

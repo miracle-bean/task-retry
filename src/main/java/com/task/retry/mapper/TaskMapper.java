@@ -26,4 +26,6 @@ public interface TaskMapper {
 
     int selectNotCompleteCount(String businessType, String groupId);
 
+    int hasFail(String businessType, String groupId);
+
 }
