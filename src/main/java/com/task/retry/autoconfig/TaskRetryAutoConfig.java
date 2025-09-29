@@ -8,12 +8,14 @@ import com.task.retry.domain.impl.TaskExecuteImpl;
 import com.task.retry.enums.DatabaseProductType;
 import com.task.retry.impl.TaskOperatorImpl;
 import com.task.retry.impl.TaskQueryImpl;
+import com.task.retry.job.SnailJob;
+import com.task.retry.job.TaskScheduleJob;
 import com.task.retry.mapper.TaskMapper;
-import com.task.retry.schedule.TaskScheduleJob;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,11 +79,15 @@ public class TaskRetryAutoConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "task-retry", name = "autoJob", havingValue = "SCHEDULE")
     public TaskScheduleJob scheduleJob(TaskExecute taskExecute) {
-        if (!properties.getAutoJob()) {
-            return null;
-        }
         return new TaskScheduleJob(taskExecute, properties);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "task-retry", name = "autoJob", havingValue = "SNAIL_JOB")
+    public SnailJob snailJob(TaskExecute taskExecute) {
+        return new SnailJob(taskExecute);
     }
 
 }

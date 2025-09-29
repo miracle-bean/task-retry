@@ -1,5 +1,6 @@
 package com.task.retry.autoconfig;
 
+import com.task.retry.enums.JobType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -21,9 +22,9 @@ public class TaskRetryProperties {
      */
     private Integer maxRetryCount = 3;
     /**
-     * 启动任务自动分发
+     * 启动任务自动分发,类型
      */
-    private Boolean autoJob = Boolean.TRUE;
+    private String autoJob = JobType.SCHEDULE.name();
     /**
      * 默认每十秒执行一次
      */

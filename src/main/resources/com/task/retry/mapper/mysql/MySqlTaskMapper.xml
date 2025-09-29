@@ -182,5 +182,12 @@
           AND t.executed_count &gt;= t.max_retry_count
     </select>
 
+    <select id="processingCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM task AS t
+        WHERE t.business_type = #{businessType}
+          AND t.state in ('WAIT', 'RUNNING')
+    </select>
+
 </mapper>
 

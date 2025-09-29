@@ -11,7 +11,7 @@
 
     <groupId>miracle.github.taskretry</groupId>
     <artifactId>task-retry-spring-boot-starter</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
 
     <properties>
         <java.version>17</java.version>
@@ -100,6 +100,12 @@
             <artifactId>podam</artifactId>
             <version>8.0.0.RELEASE</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aizuda</groupId>
+            <artifactId>snail-job-client-job-core</artifactId>
+            <version>1.5.0</version>
         </dependency>
 
     </dependencies>

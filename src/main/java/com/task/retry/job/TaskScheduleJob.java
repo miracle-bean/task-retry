@@ -1,4 +1,4 @@
-package com.task.retry.schedule;
+package com.task.retry.job;
 
 import com.task.retry.autoconfig.TaskRetryProperties;
 import com.task.retry.domain.TaskExecute;

@@ -28,4 +28,6 @@ public interface TaskMapper {
 
     int hasFail(String businessType, String groupId);
 
+    int processingCount(String businessType);
+
 }

@@ -52,4 +52,9 @@ public interface TaskQuery {
      */
     Boolean hasFail(String businessType, String groupId);
 
+    /**
+     * 查询正在处理的任务数量，包含WAIT、RUNNING
+     */
+    Integer processingCount(String businessType);
+
 }

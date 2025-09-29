@@ -29,9 +29,9 @@ public class TaskQueryImpl implements TaskQuery {
             return Lists.newArrayList();
         }
         return Optional.ofNullable(taskMapper.queryList(new QueryTaskRequest()
-                        .setBusinessType(businessType)
-                        .setBusinessId(businessId)))
-                .orElse(Lists.newArrayList());
+                .setBusinessType(businessType)
+                .setBusinessId(businessId)))
+            .orElse(Lists.newArrayList());
     }
 
     @Override
@@ -57,8 +57,8 @@ public class TaskQueryImpl implements TaskQuery {
             return Lists.newArrayList();
         }
         return Optional.ofNullable(taskMapper.queryList(new QueryTaskRequest()
-                        .setIdList(ids)))
-                .orElse(Lists.newArrayList());
+                .setIdList(ids)))
+            .orElse(Lists.newArrayList());
     }
 
     @Override
@@ -69,6 +69,11 @@ public class TaskQueryImpl implements TaskQuery {
     @Override
     public Boolean hasFail(String businessType, String groupId) {
         return taskMapper.hasFail(businessType, groupId) > 0;
+    }
+
+    @Override
+    public Integer processingCount(String businessType) {
+        return taskMapper.processingCount(businessType);
     }
 
 }

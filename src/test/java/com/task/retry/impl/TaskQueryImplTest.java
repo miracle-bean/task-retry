@@ -116,4 +116,10 @@ public class TaskQueryImplTest extends BaseTest {
         });
     }
 
+    @Test
+    @DatabaseSetup(value = {"../../../../data/task_setup.xml"})
+    public void test_processingCount_success() {
+        Integer count = taskQuery.processingCount("testDemo2");
+        assertThat(count).isEqualTo(1);
+    }
 }
