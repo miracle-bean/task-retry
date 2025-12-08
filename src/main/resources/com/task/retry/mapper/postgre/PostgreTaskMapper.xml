@@ -106,7 +106,7 @@
 
 
     <insert id="save" parameterType="com.task.retry.entity.model.Task" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO task (business_type, business_id, payload, state, max_retry_count, error_message
+        INSERT INTO task (business_type, business_id, payload, state, max_retry_count, next_fire_time, error_message
         <if test='executedCount != null'>
             , executed_count
         </if>
