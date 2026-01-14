@@ -68,6 +68,10 @@ public class Task implements Serializable {
      */
     private Integer taskOrder;
     /**
+     * 线程上下文
+     */
+    private String mdcContent;
+    /**
      * 乐观锁
      */
     private Integer version;

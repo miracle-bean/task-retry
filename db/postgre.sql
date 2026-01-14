@@ -18,6 +18,7 @@ CREATE TABLE public.task
     next_fire_time  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     error_message   text NULL,
     task_order      int4        NOT NULL DEFAULT 99,
+    mdc_content     text NULL,
     async           bool        NOT NULL DEFAULT false,
     "version"       int4        NOT NULL DEFAULT 0,
     CONSTRAINT task_pkey PRIMARY KEY (id)

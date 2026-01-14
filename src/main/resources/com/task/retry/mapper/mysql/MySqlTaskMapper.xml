@@ -16,6 +16,7 @@
         <result column="next_fire_time" jdbcType="TIMESTAMP" property="nextFireTime"/>
         <result column="error_message" jdbcType="VARCHAR" property="errorMessage"/>
         <result column="task_order" jdbcType="INTEGER" property="taskOrder"/>
+        <result column="mdc_content" jdbcType="VARCHAR" property="mdcContent"/>
         <result column="async" jdbcType="BOOLEAN" property="async"/>
         <result column="version" jdbcType="INTEGER" property="version"/>
     </resultMap>
@@ -33,6 +34,7 @@
         t.next_fire_time,
 		t.error_message,
         t.task_order,
+        t.mdc_content,
         t.async,
 		t.version
     </sql>
@@ -111,16 +113,22 @@
         <if test='taskOrder != null'>
             , task_order
         </if>
+        <if test='mdcContent != null'>
+            , mdc_content
+        </if>
         <if test='async != null'>
             , async
         </if>
         )
-        values (#{businessType}, #{businessId}, #{payload}, #{state}, #{maxRetryCount}, #{errorMessage}
+        values (#{businessType}, #{businessId}, #{payload}, #{state}, #{maxRetryCount}, #{nextFireTime} ,#{errorMessage}
         <if test='executedCount != null'>
             , #{executedCount},
         </if>
         <if test='taskOrder != null'>
             , #{taskOrder}
+        </if>
+        <if test='mdcContent != null'>
+            , #{mdcContent}
         </if>
         <if test='async != null'>
             , #{async}

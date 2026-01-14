@@ -1,5 +1,7 @@
 package com.task.retry.domain.impl;
 
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONUtil;
 import com.task.retry.domain.Factory;
 import com.task.retry.domain.TaskDomain;
 import com.task.retry.domain.TaskExecute;
@@ -8,8 +10,10 @@ import com.task.retry.entity.model.Task;
 import com.task.retry.entity.request.TaskPageRequest;
 import com.task.retry.enums.TaskState;
 import com.task.retry.mapper.TaskMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -17,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -87,6 +92,12 @@ public class TaskExecuteImpl implements TaskExecute, ApplicationContextAware {
      * -> RUNNING -> FINISH
      */
     private void doPushEvent(Task task) {
+        if (StringUtils.isNotBlank(task.getMdcContent())) {
+            Map<String, String> mdcContent = JSONUtil.toBean(task.getMdcContent(), new TypeReference<>() {
+            }, Boolean.TRUE);
+            // 上下文传递
+            mdcContent.forEach(MDC::put);
+        }
         // 创建领域
         TaskDomain domain = factory.create(taskMapper, task);
         boolean isRun = domain.running();

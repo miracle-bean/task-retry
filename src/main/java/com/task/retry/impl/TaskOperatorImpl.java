@@ -1,5 +1,6 @@
 package com.task.retry.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.task.retry.TaskOperator;
 import com.task.retry.autoconfig.TaskRetryProperties;
 import com.task.retry.domain.Factory;
@@ -10,9 +11,11 @@ import com.task.retry.entity.request.QueryTaskRequest;
 import com.task.retry.mapper.TaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: miracle
@@ -50,11 +53,18 @@ public class TaskOperatorImpl implements TaskOperator {
 
     @Override
     public void register(String businessType, String businessId, LocalDateTime nextFireTime, String payload) {
+        Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
+        String mdcContent = null;
+        if (copyOfContextMap != null) {
+            mdcContent = JSONUtil.toJsonStr(copyOfContextMap);
+        }
         TaskDomain taskDomain = factory.create(taskMapper, new Task()
                 .setBusinessType(businessType)
                 .setBusinessId(businessId)
                 .setPayload(payload)
-                .setNextFireTime(nextFireTime), properties);
+                .setNextFireTime(nextFireTime)
+                .setMdcContent(mdcContent)
+            , properties);
         taskDomain.register();
     }
 
@@ -66,7 +76,7 @@ public class TaskOperatorImpl implements TaskOperator {
             return;
         }
         List<Task> tasks = taskMapper.queryList(new QueryTaskRequest()
-                .setIdList(taskIds));
+            .setIdList(taskIds));
         tasks.parallelStream().forEach(task -> factory.create(taskMapper, task).cancel());
     }
 
@@ -77,7 +87,7 @@ public class TaskOperatorImpl implements TaskOperator {
             return;
         }
         List<Task> tasks = taskMapper.queryList(new QueryTaskRequest()
-                .setIdList(taskIds));
+            .setIdList(taskIds));
         tasks.parallelStream().forEach(task -> factory.create(taskMapper, task).reset());
     }
 
